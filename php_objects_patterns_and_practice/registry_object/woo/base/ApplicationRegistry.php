@@ -1,6 +1,6 @@
 <?php
 namespace woo\base;
-require "Registry.php";
+
 class ApplicationRegistry extends Registry
 {
     private static $instance;
@@ -43,5 +43,15 @@ class ApplicationRegistry extends Registry
         file_put_contents($path, serialize($val));
         $this->mtimes[$key] = time();
     }
+
+    public static function getDsn(){
+        return self::getInstance()->get('dsn');
+    }
+
+    public static function setDsn($dsn){
+        return self::getInstance()->set('dsn', $dsn);
+    }
 }
+
+echo ApplicationRegistry::getDsn();
 
