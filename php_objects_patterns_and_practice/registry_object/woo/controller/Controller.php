@@ -6,9 +6,9 @@ class Controller{
     private function __construct(){}
 
     public static function run(){
-        $instance = new Controller();
+        $instance = new self();
         $instance->init();
-        $instance->handleRequest();
+        //$instance->handleRequest();
     }
 
     public function init(){

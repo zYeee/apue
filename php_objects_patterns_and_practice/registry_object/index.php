@@ -2,5 +2,7 @@
 require "autoload.php";
 use woo\base\ApplicationRegistry;
 
-ApplicationRegistry::setDsn('abbb');
-ApplicationRegistry::getDsn();
+\woo\controller\Controller::run();
+
+//ApplicationRegistry::setDsn('abbb');
+//ApplicationRegistry::getDsn();
