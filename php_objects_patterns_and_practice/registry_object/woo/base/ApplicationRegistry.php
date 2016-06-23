@@ -52,6 +52,3 @@ class ApplicationRegistry extends Registry
         return self::getInstance()->set('dsn', $dsn);
     }
 }
-
-echo ApplicationRegistry::getDsn();
-

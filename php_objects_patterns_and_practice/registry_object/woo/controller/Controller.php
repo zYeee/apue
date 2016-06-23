@@ -8,7 +8,7 @@ class Controller{
     public static function run(){
         $instance = new self();
         $instance->init();
-        //$instance->handleRequest();
+        $instance->handleRequest();
     }
 
     public function init(){
