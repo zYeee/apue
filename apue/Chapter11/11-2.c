@@ -29,7 +29,7 @@ int main(){
     int err;
     void *p;
     err = pthread_create(&ntid, NULL, thr_fn, NULL);
-    pthread_join(ntid, &p);
+    pthread_join(ntid, &p); //p包含thr_fn的返回码
     printids("main thread:");
     exit(0);
 }
