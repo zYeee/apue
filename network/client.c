@@ -3,6 +3,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 int open_clientfd(char *hostname, int port){
   int clientfd;
@@ -19,6 +20,11 @@ int open_clientfd(char *hostname, int port){
   return clientfd;
 }
 int main(){
-  int clientfd = open_clientfd("localhost", 41879);
-  printf("%d", clientfd);
+  char buf[1000];
+  int clientfd = open_clientfd("localhost", 9301);
+  while (scanf("%s", buf)){
+    write(clientfd, buf, strlen(buf)+1);
+    read(clientfd, buf, 999);
+    printf("length : %d %s\n", strlen(buf), buf);
+  }
 }
