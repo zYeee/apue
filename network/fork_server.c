@@ -1,10 +1,15 @@
 #include<stdio.h>
 #include<string.h>
+#include<sys/types.h>
+#include<sys/wait.h>
 #include"netdb.h"
 #include"arpa/inet.h"
 #include"netinet/in.h"
 #include"unistd.h"
-
+void sigchld_handler(int sig){
+  while (waitpid(-1, NULL, 0) > 0);
+  return;
+}
 int open_listen(int port){
   int listenfd, optval = 1;
   struct sockaddr_in serveraddr;
@@ -33,19 +38,28 @@ void echo(int connfd){
 }
 
 int main(){
+  int listenfd, connfd, port;
   struct sockaddr_in clientaddr;
+  int clientlen = sizeof(clientaddr);
   struct hostent *hp;
   char *haddrp;
-  int listenfd = open_listen(9301);
-  int clientlen = sizeof(clientaddr);
+  
+  signal(SIGCHLD, sigchld_handler);
+  listenfd = open_listen(9301);
   while (1){
     int connfd = accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
-    printf("connfd:%d\n", connfd);
-    hp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr,
-        sizeof(clientaddr.sin_addr.s_addr), AF_INET);
-    haddrp = inet_ntoa(clientaddr.sin_addr);
-    printf("to %s :(%s)\n", hp->h_name, haddrp);
-    echo(connfd);
+    if (fork() == 0){
+      close(listenfd);
+      printf("connfd:%d\n", connfd);
+      hp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr,
+          sizeof(clientaddr.sin_addr.s_addr), AF_INET);
+      haddrp = inet_ntoa(clientaddr.sin_addr);
+      printf("to %s :(%s)\n", hp->h_name, haddrp);
+      echo(connfd);
+      close(connfd);
+      exit(0);
+    }
     close(connfd);
   }
 }
+
