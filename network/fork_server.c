@@ -1,32 +1,10 @@
-#include<stdio.h>
-#include<string.h>
 #include<sys/types.h>
 #include<sys/wait.h>
-#include"netdb.h"
-#include"arpa/inet.h"
-#include"netinet/in.h"
-#include"unistd.h"
+#include"global.h"
 void sigchld_handler(int sig){
   while (waitpid(-1, NULL, 0) > 0);
   return;
 }
-int open_listen(int port){
-  int listenfd, optval = 1;
-  struct sockaddr_in serveraddr;
-
-  listenfd = socket(AF_INET, SOCK_STREAM, 0);
-  setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval, sizeof(int));
-
-  bzero((char *) &serveraddr, sizeof(serveraddr));
-  serveraddr.sin_family = AF_INET;
-  serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-  serveraddr.sin_port = htons((unsigned short)port);
-
-  bind(listenfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
-  listen(listenfd, 1024);
-  return listenfd;
-}
-
 void echo(int connfd){
   size_t n;
   char buf[1000];
