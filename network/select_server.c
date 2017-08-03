@@ -58,7 +58,7 @@ void add_client(int connfd, pool *p){
 }
 
 void check_clients(pool *p){
-  int i, connfd, n, len;
+  int i, connfd, n;
   char buf[1000];
 
   for (i=0; (i <= p->maxi)&&(p->nready>0);i++){
@@ -66,7 +66,8 @@ void check_clients(pool *p){
     if (connfd && FD_ISSET(connfd, &p->ready_set)){
       p->nready--;
       if (read(connfd, buf, 999)){
-        printf("length : %d %s\n", strlen(buf), buf);
+        printf("connfd:%d length : %d %s\n",connfd, strlen(buf), buf);
+        write(connfd, buf, strlen(buf));
       }
       else {
         close(connfd);
@@ -89,6 +90,7 @@ int main(){
 
     if (FD_ISSET(listenfd, &pool.ready_set)){
       int connfd = accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
+      printf("connected connfd:%d\n", connfd);
       add_client(connfd, &pool);
     }
 
