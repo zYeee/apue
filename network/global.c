@@ -1,4 +1,5 @@
 #include"global.h"
+
 int open_listen(int port){
   int listenfd, optval = 1;
   struct sockaddr_in serveraddr;
@@ -15,6 +16,7 @@ int open_listen(int port){
   listen(listenfd, 1024);
   return listenfd;
 }
+
 int open_client(char *hostname, int port){
   int clientfd;
   struct hostent *hp;
@@ -29,3 +31,14 @@ int open_client(char *hostname, int port){
   connect(clientfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
   return clientfd;
 }
+
+void echo(int connfd){
+  size_t n;
+  char buf[1000];
+  int len;
+  while (len = read(connfd, buf, 999)){
+    printf("length : %d %s\n", strlen(buf), buf);
+    write(connfd, buf, len);
+  }
+}
+

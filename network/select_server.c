@@ -48,6 +48,7 @@ void check_clients(pool *p){
         write(connfd, buf, strlen(buf));
       }
       else {
+        printf("disconnected:%d\n", connfd);
         close(connfd);
         FD_CLR(connfd, &p->read_set);
         p->clientfd[i] = -1;

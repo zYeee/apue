@@ -1,13 +1,4 @@
 #include "global.h"
-void echo(int connfd){
-  size_t n;
-  char buf[1000];
-  int len;
-  while (len = read(connfd, buf, 999)){
-    printf("length : %d %s\n", strlen(buf), buf);
-    write(connfd, buf, len);
-  }
-}
 
 int main(){
   struct sockaddr_in clientaddr;

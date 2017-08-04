@@ -5,15 +5,6 @@ void sigchld_handler(int sig){
   while (waitpid(-1, NULL, 0) > 0);
   return;
 }
-void echo(int connfd){
-  size_t n;
-  char buf[1000];
-  int len;
-  while (len = read(connfd, buf, 999)){
-    printf("length : %d %s\n", strlen(buf), buf);
-    write(connfd, buf, len);
-  }
-}
 
 int main(){
   int listenfd, connfd, port;
