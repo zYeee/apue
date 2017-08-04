@@ -1,13 +1,14 @@
-bins = server fork_server select_server pthread_server client 
-all : $(bins) 
+bins = server fork_server select_server client 
+bins_special = pthread_server
+bins_all = $(bins) $(bins_special)
+all: $(bins) $(bins_special)
 
-server:global.o server.o
-fork_server:global.o fork_server.o
-select_server:global.o select_server.o
-pthread_server:global.o pthread_server.o
+#<targets ...> : <target-pattern> : <prereq-patterns> $@ --> target-patterns $< --> prereq-patterns
+$(bins) : % : %.o global.o
+
+pthread_server : global.o pthread_server.o
 	cc -o pthread_server global.o pthread_server.o -lpthread
-client:global.o client.o
 
-.PHONY : clean
+.PHONY : all clean
 clean:
-	-rm *.o $(bins)
+	-rm *.o $(bins_all)
