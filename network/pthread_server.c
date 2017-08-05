@@ -3,6 +3,7 @@
 
 void *thread(void *vargp){
   int connfd = *((int *)vargp);
+  printf("connected: conned:%d\n", connfd);
   pthread_detach(pthread_self());
   free(vargp); //function of free only can free the malloc and calloc
   echo(connfd);
